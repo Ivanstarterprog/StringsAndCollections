@@ -12,7 +12,7 @@ namespace StringsAndCollections
         private const string PhoneRegex = @"\((\d{3})\)\s?(\d{3})-(\d{2})-(\d{2})";
         private Dictionary<string, List<string>> _errorsDictionary;
         private string _workingDirectory { get; set; }
-        private string _dictionaryPath {  get; set; }
+        private string _dictionaryPath { get; set; }
 
         public StringErrorsFixer()
         {
@@ -51,7 +51,7 @@ namespace StringsAndCollections
             using (StreamReader streamReader = new StreamReader(textFile))
             {
                 string line;
-                while((line = streamReader.ReadLine()) != null)
+                while ((line = streamReader.ReadLine()) != null)
                 {
                     foreach (var word in _errorsDictionary)
                     {
@@ -86,19 +86,19 @@ namespace StringsAndCollections
 
     class Menu
     {
-        private static Menu instance;
+        private static Menu _instance;
         private StringErrorsFixer _stringErrorsFixer = new StringErrorsFixer();
         public static Menu Instance
         {
 
             get
             {
-                if (instance == null) instance = new Menu();
-                return instance;
+                if (_instance == null) _instance = new Menu();
+                return _instance;
             }
         }
 
-        public void MenuRender() 
+        public void MenuRender()
         {
             Console.WriteLine(_stringErrorsFixer);
             MenuOperationChoice();
@@ -132,7 +132,7 @@ namespace StringsAndCollections
             Console.WriteLine("3. Указать адрес до словаря");
             Console.Write("Введите номер операции: ");
             int operationChoice = Convert.ToInt16(Console.ReadLine());
-            switch(operationChoice)
+            switch (operationChoice)
             {
                 case 1:
                     MenuFixerStart();
@@ -144,7 +144,7 @@ namespace StringsAndCollections
                     MenuChangeDictionary();
                     break;
                 default:
-                    Console.WriteLine("Неопознанная команда! Попробуйте заного");
+                    Console.WriteLine("Неопознанная команда! Попробуйте заново");
                     break;
             }
             Console.WriteLine("Нажмите любую кнопку чтобы продолжить...");
@@ -156,10 +156,9 @@ namespace StringsAndCollections
     {
         static void Main(string[] args)
         {
-            Menu mainMenu = new Menu();
             while (true)
             {
-                mainMenu.MenuRender();
+                Menu.Instance.MenuRender();
             }
         }
     }
