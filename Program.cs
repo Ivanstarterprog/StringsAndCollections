@@ -48,6 +48,7 @@ namespace StringsAndCollections
 
         public void FixFile(string textFile)
         {
+            StringBuilder resultFileText = new StringBuilder();
             using (StreamReader streamReader = new StreamReader(textFile))
             {
                 string line;
@@ -57,11 +58,20 @@ namespace StringsAndCollections
                     {
                         foreach (var error in word.Value)
                         {
-                            line.Replace(error, word.Key);
+                            foreach (Match errorMatch in Regex.Matches(line, error))
+                            {
+                                line = line.Replace(error, word.Key);
+                            }
+
                         }
                     }
-                    Regex.Replace(line, PhoneRegex, "+380 $1 $2 $3 $4");
+                    line = Regex.Replace(line.ToString(), PhoneRegex, "+380 $1 $2 $3 $4");
+                    resultFileText.AppendLine(line);
                 }
+            }
+            using (StreamWriter streamWriter = new StreamWriter(textFile))
+            {
+                streamWriter.Write(resultFileText.ToString());
             }
         }
 
@@ -69,6 +79,7 @@ namespace StringsAndCollections
         {
             foreach (string file in Directory.EnumerateFiles(_workingDirectory, "*.txt", SearchOption.TopDirectoryOnly))
             {
+                Console.WriteLine(file);
                 FixFile(file);
             }
         }
